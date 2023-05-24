@@ -1,0 +1,21 @@
+{
+    "name": "hcyruskia/offloader",
+    "description": "A package that supports offloading files to external buckets, leapfrogging the primary file server",
+    "type": "wordpress-plugin",
+    "license": "MIT",
+    "autoload": {
+        "psr-4": {
+            "Hcyruskia\\Offloader\\": "src/"
+        }
+    },
+    "authors": [
+        {
+            "name": "y"
+        }
+    ],
+    "minimum-stability": "alpha",
+    "require": {
+        "aws/aws-sdk-php": "^3.271",
+        "google/cloud-storage": "^1.31"
+    }
+}
