@@ -1,19 +1,25 @@
 {
-    "name": "hcyruskia/offloader",
+    "name": "leapfrog/leapfrog",
     "description": "A package that supports offloading files to external buckets, leapfrogging the primary file server",
     "type": "wordpress-plugin",
     "license": "MIT",
+    "require": {
+        "php": ">=7.4"
+    },
     "autoload": {
         "psr-4": {
-            "Hcyruskia\\Offloader\\": "src/"
+            "Leapfrog\\": "src/Leapfrog/"
         }
     },
     "authors": [
         {
-            "name": "y"
+            "name": "Cyrus Kia"
         }
     ],
     "minimum-stability": "alpha",
+    "require-dev": {
+        "phpunit/phpunit": "^9.5"
+    },
     "require": {
         "aws/aws-sdk-php": "^3.271",
         "google/cloud-storage": "^1.31"
