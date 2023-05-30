@@ -19,3 +19,4 @@ wp-config.php should define...
 ## to dos
 - [ ] update `register_routes` in `./src/Leapfrog/API/SignedUrlController.php`
 - [ ] Add  check_permissions, validate_object_name, and validate_content_type methods to `./src/Leapfrog/API/SignedUrlController.php`
+- [ ] update uppy version
