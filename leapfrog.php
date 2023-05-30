@@ -8,9 +8,10 @@
  * Text Domain: leapfrog-plugin
  */
 
-require 'vendor/autoload.php';
+require __DIR__ . '/vendor/autoload.php';
 
 use Leapfrog\Bootstrap;
+use Leapfrog\Admin\Menu;
 
 // Prevent direct access to the file.
 defined('ABSPATH') or die('No script kiddies please!');
@@ -23,9 +24,9 @@ if (!class_exists('Leapfrog')) {
             add_action('plugins_loaded', [$this, 'load_textdomain']);
             add_action('admin_notices', [$this, 'admin_notices']);
             // Initialize the Bootstrap class
-            $bootstrap = new Bootstrap();
-            $bootstrap->run();
-
+            Bootstrap::initialize();
+            // Initialize the menu class
+            //$menu = new Menu();
             // Plugin activation
             register_activation_hook(__FILE__, [$this, 'activate']);
             // Plugin deactivation
@@ -53,6 +54,10 @@ if (!class_exists('Leapfrog')) {
                     error_log('GCS_KEY_FILE_PATH constant is not defined.', 0);
                     set_transient('leapfrog_missing_constants', true, 5);
                 }
+                if (!defined('BUCKET_NAME')) {
+                    error_log('BUCKET_NAME constant is not defined.', 0);
+                    set_transient('leapfrog_missing_constants', true, 5);
+                }
             } else if (BUCKET_SERVICE === 's3') {
                 if (!defined('AWS_ACCESS_KEY')) {
                     error_log('AWS_ACCESS_KEY constant is not defined.', 0);
@@ -64,6 +69,10 @@ if (!class_exists('Leapfrog')) {
                 }
                 if (!defined('AWS_REGION')) {
                     error_log('AWS_REGION constant is not defined.', 0);
+                    set_transient('leapfrog_missing_constants', true, 5);
+                }
+                if (!defined('BUCKET_NAME')) {
+                    error_log('BUCKET_NAME constant is not defined.', 0);
                     set_transient('leapfrog_missing_constants', true, 5);
                 }
             } else {

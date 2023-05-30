@@ -1,35 +1,54 @@
 <?php
 
-namespace src\Offloader;
+namespace Leapfrog\Library;
 
 use Google\Cloud\Storage\StorageClient;
+use Google\Cloud\Core\Timestamp;
 
-class GCSService
-{
-    private $storage;
+class GCSService implements StorageServiceInterface {
+    private $storageClient;
 
-    public function __construct($projectId, $keyFilePath) {
-        $this->storage = new StorageClient([
-            'projectId' => $projectId,
-            'keyFilePath' => $keyFilePath
+    public function __construct()
+    {
+        $this->storageClient = new StorageClient([
+            'projectId' => GCS_PROJECT_ID,
+            'keyFilePath' => GCS_KEY_FILE_PATH,
         ]);
     }
 
-    public function uploadFile($bucketName, $sourceFile, $targetName) {
-        try {
-            $bucket = $this->storage->bucket($bucketName);
-            $file = fopen($sourceFile, 'r');
-            $object = $bucket->upload($file, [
-                'name' => $targetName
-            ]);
+    public function getSignedUrl($bucket, $objectName, $contentType)
+    {
+        $bucket = $this->storageClient->bucket($bucket);
+        $object = $bucket->object($objectName);
+        
+        $url = $object->signedUrl(new Timestamp(new \DateTime('+1 hour')), [
+            'method' => 'PUT',
+            'contentType' => $contentType,
+        ]);
 
-            return $object->info()['mediaLink'];
-        } catch (\Exception $e) {
-            // Output error message if fails
-            error_log($e->getMessage());
-            return false;
-        }
+        return $url;
     }
 
-    // Additional methods to handle GCS actions will go here.
+    public function uploadFile($bucket, $filePath, $objectName)
+    {
+        // Upload the file to the bucket.
+        $file = fopen($filePath, 'r');
+        $bucket = $this->storageClient->bucket($bucket);
+        $bucket->upload($file, ['name' => $objectName]);
+    }
+
+    public function fileExists($bucket, $objectName)
+    {
+        $bucket = $this->storageClient->bucket($bucket);
+        $object = $bucket->object($objectName);
+
+        return $object->exists();
+    }
+
+    public function deleteFile($bucket, $objectName)
+    {
+        $bucket = $this->storageClient->bucket($bucket);
+        $object = $bucket->object($objectName);
+        $object->delete();
+    }
 }
