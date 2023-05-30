@@ -1,0 +1,6 @@
+{
+  "dependencies": {
+    "@uppy/core": "^3.2.0",
+    "@uppy/xhr-upload": "^3.2.0"
+  }
+}

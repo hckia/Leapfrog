@@ -23,6 +23,15 @@ class Menu {
         wp_enqueue_script('uppy', 'https://transloadit.edgly.net/releases/uppy/v2.0.1/uppy.min.js', [], null, true);
         wp_enqueue_style('uppy', 'https://transloadit.edgly.net/releases/uppy/v2.0.1/uppy.min.css', [], null);
         wp_enqueue_script('my-uppy-script', plugin_dir_url(dirname(__FILE__, 3)) . 'js/uppy-setup.js', ['uppy'], '1.0.0', true);
+        $script_data = [
+            'BUCKET_SERVICE' => BUCKET_SERVICE, // Replace BUCKET_SERVICE with your bucket service constant or variable
+        ];
+        
+        if (BUCKET_SERVICE === 'S3') {
+            $script_data['BUCKET_NAME'] = BUCKET_NAME; // Replace BUCKET_NAME with your bucket name constant or variable
+        }
+    
+        wp_localize_script('my-uppy-script', 'wpData', $script_data);
     }
 
     public function add_media_upload_page() {

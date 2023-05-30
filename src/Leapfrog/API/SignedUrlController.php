@@ -31,8 +31,20 @@ class SignedUrlController {
                 ],
             ],
         ]);
+
+        register_rest_route($this->namespace, '/allowed-mime-types', [
+            'methods' => 'GET',
+            'callback' => [$this, 'get_allowed_mime_types'],
+        ]);
     }
     
+    public function get_allowed_mime_types() {
+        // Fetch allowed mime types from WordPress
+        $mime_types = get_allowed_mime_types();
+    
+        return rest_ensure_response($mime_types);
+    }
+
     public function get_signed_url($request) {
         $objectName = $request->get_param('objectName');
         $contentType = $request->get_param('contentType');
